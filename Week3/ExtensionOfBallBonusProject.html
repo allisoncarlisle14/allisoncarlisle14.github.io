@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bouncing Projectiles Bonus Assignment</title>
+  </head>
+  <body>
+    <!-- Defining a ball: -->
+    <div
+      id="ball"
+      style="
+        z-index: 1;
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgb(128, 0, 128);
+        opacity: 1;
+      "
+    ></div>
+
+    <button type = "button" onclick = "createBall()"> Click to create a ball! </button>
+    <button type = "button" onclick = "moveBalls()" > Click to make the balls move! </button>
+    <!-- still need to build this button out-->
+    <button type = "button"> Stop the animation </button> 
+
+    <script>
+      let xPositions = [ ]; // holds the xPositions of all the balls
+      let yPositions = [ ]; // holds the yPositions of all the balls
+      let xVelocities = [ ]; // holds the xVelocities of all the balls
+      let yVelocities = [ ]; // holds the yVelocities of all the balls
+      let balls = [ ]; // array to hold all the balls
+      var dx = 10;
+      var dy = -10;
+      //Vertical acceleration:
+      var ay = 1;
+      //Time interval:
+      var dt = 50;
+      //Percent of vertical speed remaining after bounce as a decimal:
+      var percent = 0.75;
+
+      function randomColor() {
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+      }
+
+      function createBall(
+        //xClickCoordinate,
+        //yClickCoordinate,
+        //xVelocity,
+        //yVelocity
+      ) {
+        let ball = document.getElementById("ball");
+        // ball.style.zIndex = 1;
+        // ball.style.position = absolute;
+        // ball.style.width = "50px"; 
+        // ball.style.height = "50px";
+        // ball.style.borderRadius = "50%";
+        // ball.style.opacity = 1;
+        const radius = parseInt(ball.style.width);
+        let opacity = parseInt(ball.style.opacity);
+        ball.style.backgroundColor = randomColor();
+        ball.style.left = Math.floor(Math.random()*(screen.width-radius)) + "px"; 
+        let xPosition = ball.style.left;
+        ball.style.top = Math.floor(Math.random()*(screen.height-radius)) + "px";
+        let yPosition = ball.style.top;
+        balls.push(ball); 
+      }
+
+      function move() {
+        if (opacity > 0) {
+          x = x + dx;
+          ball.style.left = x + "px";
+          y = y + dy;
+          ball.style.top = y + "px";
+          dy = dy + ay;
+          if (y > ground && dy > 0) {
+            dy = -percent * dy;
+            opacity = opacity - 0.05;
+            ball.style.opacity = opacity;
+          }
+        }
+      }
+
+      function giveBallARandomLaunchVelocity () {
+
+
+      }
+
+      function bounceAtBoundaries() {
+        const ceiling = 0;
+        const ground = screen.height;
+        const leftWall = 0;
+        const rightWall = screen.width;
+        let radius = ball.style.width;
+        let xPosition = ball.style.left;
+        let yPosition = ball.style.top;
+        let xVelocity = 0; //need to fill this in
+        let yVelocity = 0; //need to fill this in
+        if (xPosition < leftWall) {
+          xVelocity *= -1;
+          xPosition = leftWall;
+        } else if (xPosition > rightWall - radius) {
+          xVelocity *= -1;
+          xPosition = rightWall - radius;
+        }
+        if (yPosition < ceiling) {
+          yVelocity *= -1;
+          yPosition = ceiling;
+        } else if (yPosition > ground - radius) {
+          yVelocity *= -1;
+          yPosition = ground - radius;
+        }
+      }
+
+      setInterval(move, dt);
+    </script>
+  </body>
+</html>
