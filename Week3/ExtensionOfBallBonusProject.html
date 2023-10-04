@@ -6,26 +6,28 @@
     <title>Bouncing Projectiles Bonus Assignment</title>
   </head>
   <body>
-
-    <button type = "button" onclick = "createBall()"> Click to create a ball! </button>
-    <button type = "button" onclick = "moveBalls()" > Click to make the balls move! </button>
+    <button type="button" onclick="createBall()">Click to create balls!</button>
+    <button type="button" onclick="moveBalls()">
+      Click to make the balls move!
+    </button>
     <!-- still need to build this button out-->
-    <button type = "button"> Stop the animation </button> 
+    <button type="button" onclick="stopAnimation()">Stop the animation</button>
 
     <script>
-      let xPositions = [ ]; // holds the xPositions of all the balls
-      let yPositions = [ ]; // holds the yPositions of all the balls
-      let xVelocities = [ ]; // holds the xVelocities of all the balls
-      let yVelocities = [ ]; // holds the yVelocities of all the balls
-      let balls = [ ]; // array to hold all the balls
-      var dx = 10;
-      var dy = -10;
+      let xPositions = []; // holds the xPositions of all the balls
+      let yPositions = []; // holds the yPositions of all the balls
+      let xVelocities = []; // holds the xVelocities of all the balls
+      let yVelocities = []; // holds the yVelocities of all the balls
+      let balls = []; // array to hold all the balls
+      let radius = 40;
+      let margin = 200;
+
       //Vertical acceleration:
-      var ay = 1;
+      let g = 1;
       //Time interval:
-      var dt = 50;
+      let dt = 50;
       //Percent of vertical speed remaining after bounce as a decimal:
-      var percent = 0.75;
+      let percent = 0.75;
 
       function randomColor() {
         let r = Math.floor(Math.random() * 255);
@@ -39,22 +41,24 @@
         ball.style.zIndex = 1;
         ball.style.position = "absolute";
         ball.style.backgroundColor = randomColor();
-        ball.style.width = "40px";
-        ball.style.height = "40px";
+        ball.style.width = radius.toString() + "px";
+        ball.style.height = radius.toString() + "px";
         ball.style.borderRadius = "50%";
         ball.style.opacity = 1;
-        const radius = parseInt(ball.style.width);
-        const margin = 100;
 
-        ball.style.left = Math.floor(Math.random()*(screen.availWidth - (radius+margin)))+"px";
-        ball.style.top = Math.floor(Math.random()*(screen.availHeight - (radius+margin)))+"px";
+        let xPosition = Math.floor(
+          Math.random() * (screen.availWidth - (radius + margin))
+        );
+        let yPosition = Math.floor(
+          Math.random() * (screen.availHeight - (radius + margin)) + margin / 2
+        );
 
-        
+        ball.style.left = xPosition + "px";
+        ball.style.top = yPosition + "px";
+
         let opacity = ball.style.opacity;
-        let xPosition = Number(ball.style.left);
-        let yPosition = Number(ball.style.top);
-        let xVelocity = Math.floor(Math.random()*20 - 10);
-        let yVelocity = Math.floor(Math.random()*20 - 10);
+        let xVelocity = Math.floor(Math.random() * 20 - 10);
+        let yVelocity = Math.floor(Math.random() * 20 - 10);
 
         document.body.appendChild(ball);
 
@@ -63,57 +67,65 @@
         yPositions.push(yPosition);
         xVelocities.push(xVelocity);
         yVelocities.push(yVelocity);
-
       }
 
-
-      function move() {
-        if (opacity > 0) {
-          x = x + dx;
-          ball.style.left = x + "px";
-          y = y + dy;
-          ball.style.top = y + "px";
-          dy = dy + ay;
-          if (y > ground && dy > 0) {
-            dy = -percent * dy;
-            opacity = opacity - 0.05;
-            ball.style.opacity = opacity;
+      function moveBalls() {
+        for (let i = 0; i < balls.length; i++) {
+          if (balls[i].style.opacity > 0) {
+            xPositions[i] += xVelocities[i];
+            balls[i].style.left = xPositions[i] + "px";
+            yPositions[i] += yVelocities[i];
+            balls[i].style.top = yPositions[i] + "px";
+            yVelocities[i] += g;
+            bounceAtBoundaries(
+              i,
+              xPositions[i],
+              yPositions[i],
+              xVelocities[i],
+              yVelocities[i],
+              balls[i].style.opacity
+            );
           }
         }
+        setTimeout(moveBalls, dt);
       }
 
-      function giveBallARandomLaunchVelocity () {
-
-
-      }
-
-      function bounceAtBoundaries() {
+      function bounceAtBoundaries(
+        ballNumber,
+        xPosition,
+        yPosition,
+        xVelocity,
+        yVelocity,
+        opacity
+      ) {
         const ceiling = 0;
-        const ground = screen.height;
+        const ground = screen.height - margin;
         const leftWall = 0;
-        const rightWall = screen.width;
-        let radius = ball.style.width;
-        let xPosition = ball.style.left;
-        let yPosition = ball.style.top;
-        let xVelocity = 0; //need to fill this in
-        let yVelocity = 0; //need to fill this in
+        const rightWall = screen.width - margin;
+
         if (xPosition < leftWall) {
-          xVelocity *= -1;
-          xPosition = leftWall;
+          xVelocities[ballNumber] *= -percent;
+          xPositions[ballNumber] = leftWall;
+          balls[ballNumber].style.left = xPositions[ballNumber] + "px";
+          balls[ballNumber].style.opacity -= 0.05;
         } else if (xPosition > rightWall - radius) {
-          xVelocity *= -1;
-          xPosition = rightWall - radius;
+          xVelocities[ballNumber] *= -percent;
+          xPositions[ballNumber] = rightWall - radius;
+          balls[ballNumber].style.left = xPositions[ballNumber] + "px";
+          balls[ballNumber].style.opacity -= 0.05;
         }
         if (yPosition < ceiling) {
-          yVelocity *= -1;
-          yPosition = ceiling;
+          yVelocities[ballNumber] *= -percent;
+          yPositions[ballNumber] = ceiling;
+          balls[ballNumber].style.top = yPositions[ballNumber] + "px";
+          balls[ballNumber].style.opacity -= 0.05;
         } else if (yPosition > ground - radius) {
-          yVelocity *= -1;
-          yPosition = ground - radius;
+          yVelocities[ballNumber] *= -percent;
+          yPositions[ballNumber] = ground - radius;
+          balls[ballNumber].style.top = yPositions[ballNumber] + "px";
+          balls[ballNumber].style.opacity -= 0.05;
         }
       }
-
-      setInterval(move, dt);
     </script>
   </body>
 </html>
