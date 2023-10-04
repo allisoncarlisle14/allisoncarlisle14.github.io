@@ -18,7 +18,7 @@
       let yVelocities = []; // holds the yVelocities of all the balls
       let balls = []; // array to hold all the balls
       let radius = 40;
-      let margin = 200;
+      let margin = 400;
       let animation = false;
 
       //Vertical acceleration:
@@ -46,10 +46,10 @@
         ball.style.opacity = 1;
 
         let xPosition = Math.floor(
-          Math.random() * (screen.availWidth - (radius + margin))
+          Math.random() * (screen.availWidth - (margin+radius)) + margin/2
         );
         let yPosition = Math.floor(
-          Math.random() * (screen.availHeight - (radius + margin)) + margin / 2
+          Math.random() * (screen.availHeight - (margin+radius)) + margin/2
         );
 
         ball.style.left = xPosition + "px";
@@ -109,10 +109,10 @@
         yVelocity,
         opacity
       ) {
-        const ceiling = 0;
-        const ground = screen.height - margin;
-        const leftWall = 0;
-        const rightWall = screen.width - margin;
+        const ceiling = margin/2;
+        const ground = screen.availHeight - margin/2;
+        const leftWall = margin/2;
+        const rightWall = screen.availWidth - margin/2;
 
         if (xPosition < leftWall) {
           xVelocities[ballNumber] *= -percent;
