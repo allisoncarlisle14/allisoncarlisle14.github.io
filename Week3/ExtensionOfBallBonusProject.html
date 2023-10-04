@@ -7,11 +7,9 @@
   </head>
   <body>
     <button type="button" onclick="createBall()">Click to create balls!</button>
-    <button type="button" onclick="toggleAnimation()">
+    <button type="button" id="toggle" onclick="toggleAnimation()">
       Start simulation!
     </button>
-    <!-- still need to build this button out-->
-    <button type="button" onclick="toggleAnimation()">Stop the animation</button>
 
     <script>
       let xPositions = []; // holds the xPositions of all the balls
@@ -22,7 +20,6 @@
       let radius = 40;
       let margin = 200;
       let animation = false;
-     
 
       //Vertical acceleration:
       let g = 1;
@@ -93,10 +90,16 @@
           setTimeout(moveBalls, dt);
         }
       }
+
       function toggleAnimation() {
         animation = !animation;
+        if (animation) {
+          document.getElementById("toggle").innerHTML = "Pause Simulation";
+        } else {
+          document.getElementById("toggle").innerHTML = "Start Simulation";
+        }
         moveBalls();
-    }
+      }
 
       function bounceAtBoundaries(
         ballNumber,
