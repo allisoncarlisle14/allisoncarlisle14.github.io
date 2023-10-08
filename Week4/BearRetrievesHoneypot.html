@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+  <title>Bear retrieves honey</title>
+</head>
+<p> Directions:
+<ol>
+  <li>Click "Spawn Bear" to spawn the bear. </li>
+  <li>Click "Spawn Honey" to spawn the honey. </li>
+  <li>Click "Retrieve Honey" to help the bear find the honey.</li>
+</ol>
+</p>
+
+<button id="spawn bear" onclick="spawnBear()"> Spawn Bear </button>
+<button id="spawn honey" onclick="spawnHoney()"> Spawn Honey </button>
+<button id="retrieve honey" onclick="retrieveHoney()"> Retrieve Honey </button>
+<img src="Bear.png" id="bear" style="display: none; position: absolute">
+<img src="Honeypot.png" id="honey" style="display: none; position: absolute">
+
+<body>
+  <script>
+    let bearXPosition = 0;
+    let honeyXPosition = 0;
+    let readyToSpawnBear = true;
+    let readyToSpawnHoney = false;
+    let readyToRetrieveHoney = false;
+    let walkingDirection = [0, 1, 2]; // 0 is standing still, 1 is walking to the right, 2 is walking to the left
+    let direction = walkingDirection[0];
+    let imageCycler = 0; // this will alternate between 0 and 1 so that as the bear walks, the image will alternate between two images in the arrayOfBearImages
+    let cyclerMultiplier = 1; // this will alternate between -1 and 1 so that the imageCylcer can alternate between 0 and 1.
+    const velocity = 30;
+    const bearYPosition = 200;
+    const honeyYPosition = 450;
+    const bear = document.getElementById("bear");
+    const honey = document.getElementById("honey")
+    const arrayOfBearImages = [
+      ["Bear.png", "BearHoldingHoneypot.png"],
+      [
+        "BearWalkingRightLeftFootForward.png",
+        "BearWalkingRightRightFootForward.png",
+      ],
+      [
+        "BearWalkingLeftRightFootForward.png",
+        "BearWalkingLeftLeftFootForward.png",
+      ],
+    ];
+
+    const spawnBear = function spawnBear() {
+      if (readyToSpawnBear) {
+        bear.src = arrayOfBearImages[0][0];
+        bearXPosition = Math.floor(Math.random() * (screen.availWidth - bear.width));
+        bear.style.left = bearXPosition + 'px';
+        bear.style.top = bearYPosition + 'px';
+        bear.style.display = 'block';
+        readyToSpawnBear = false;
+        readyToSpawnHoney = true;
+      }
+    }
+
+    const spawnHoney = function spawnHoney() {
+      if (readyToSpawnHoney) {
+        honeyXPosition = Math.floor(Math.random() * (screen.availWidth - bear.width));
+        console.log(honeyXPosition);
+        honey.style.left = honeyXPosition + 'px';
+        honey.style.top = honeyYPosition + 'px';
+        honey.style.display = 'block';
+
+        if (honeyXPosition > bearXPosition) {
+          direction = walkingDirection[1];
+          readyToRetrieveHoney = true;
+        } else if (honeyXPosition < bearXPosition) {
+          direction = walkingDirection[2];
+          readyToRetrieveHoney = true;
+        } else {
+          direction = walkingDirection[0];
+          img.src = arrayOfBearImages[0][1];
+          readyToSpawnBear = true;
+        }
+        readyToSpawnHoney = false;
+
+      }
+    }
+
+    const retrieveHoney = function retrieveHoney() {
+      if (readyToRetrieveHoney) {
+        let id = setTimeout(retrieveHoney, 300);
+        document.getElementById("retrieve honey").onclick = '';
+        if (direction === walkingDirection[1] && (bearXPosition + bear.width) < (honeyXPosition + honey.width)) {
+          bearXPosition += velocity;
+          bear.style.left = bearXPosition + 'px';
+          bear.src = arrayOfBearImages[direction][imageCycler];
+          imageCycler += cyclerMultiplier;
+          cyclerMultiplier *= -1;
+        } else if (direction === walkingDirection[2] && bearXPosition > honeyXPosition) {
+          bearXPosition -= velocity;
+          bear.style.left = bearXPosition + 'px';
+          bear.src = arrayOfBearImages[direction][imageCycler];
+          imageCycler += cyclerMultiplier;
+          cyclerMultiplier *= -1;
+        } else {
+          bear.src = arrayOfBearImages[0][1];
+          honey.style.display = 'none';
+          readyToSpawnBear = true;
+          readyToRetrieveHoney = false;
+          clearTimeout(id);
+          document.getElementById("retrieve honey").onclick = retrieveHoney;
+        }
+      }
+    }
+
+  </script>
+</body>
+
+</html>
