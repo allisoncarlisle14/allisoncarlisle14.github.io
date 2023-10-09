@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fly A Plane Between Cities</title>
+  </head>
+  <body>
+    <div id = "container">
+    </div>
+    
+
+    <script>
+
+      /* I came up with the positions for these cities using trial and error. 
+      I used an image of a map and moved the cities until they were at approximately the correct locations.*/
+      const arrayOfCities = [
+      {name: "Chicago", xCoord: 650, yCoord: 235},
+      {name: "Houston", xCoord: 520, yCoord: 515},
+      {name: "Los Angeles", xCoord: 85, yCoord: 370}, 
+      {name: "New York", xCoord: 890, yCoord: 220}, 
+      {name: "Phoenix", xCoord: 200, yCoord: 400}];
+      let planeHasSpawned = false;
+      let planeIsFlying = false;
+      let innerHTMLForMap = "";
+      for (const element of arrayOfCities) {
+        innerHTMLForMap += `<div id = "${element.name}"
+                    onclick = "spawnPlane(${element.xCoord}, ${element.yCoord})"
+                    style = "z-index: 1;
+                    position: absolute;
+                    left: ${element.xCoord}px;
+                    top: ${element.yCoord}px;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: navy;">
+                    </div>
+
+                    <span
+                    style = "z-index: 2;
+                    position: absolute;
+                    left: ${element.xCoord + 10}px;
+                    top: ${element.yCoord + 10}px;">
+                    ${element.name}
+                    </span>`;
+      }
+      document.getElementById("container").innerHTML = innerHTMLForMap;
+      
+      const spawnPlane = function spawnPlane(xCoord, yCoord) {
+        if (!planeHasSpawned && !planeIsFlying) {
+            innerHTMLForMap += `<div
+            style = "z-index: 2;
+            position: absolute; 
+            left: ${xCoord}px;
+            top: ${yCoord}px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: grey;">
+            </div>`
+            planeHasSpawned = true;
+            document.getElementById("container").innerHTML = innerHTMLForMap;
+        } else flyPlane(xCoord, yCoord);
+      }
+      const flyPlane = function flyPlane(toCity) {};
+
+    </script>
+  </body>
+</html>
+
