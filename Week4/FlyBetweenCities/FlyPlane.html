@@ -7,7 +7,7 @@
     <h2>Directions:</h2>
     <h4>
       <ol>
-        <li>Click on any city to spawn an airplane.</li>
+        <li>Click on the dot representing any city to spawn a plane there.</li>
         <li>Click a different city to fly the plane to a new destination.</li>
         <li>
           Once the plane reaches its destination, you can repeat step 2 as many
@@ -17,8 +17,8 @@
     </h4>
     <div id="container"></div>
     <script>
-      /* I came up with the positions for these cities using trial and error. 
-      I used an image of a map and moved the cities until they were at approximately the correct locations.*/
+      /* I chose the five most populous cities in the US and positioned these cities on the screen using trial and error. 
+      I originally included an image of a map and then moved the cities until they were at approximately the correct locations.*/
       const arrayOfCities = [
         { name: "Chicago", xCoord: 650, yCoord: 235 },
         { name: "Houston", xCoord: 520, yCoord: 515 },
@@ -36,6 +36,7 @@
       let xCoordOfDestination = 0;
       let yCoordOfDestination = 0;
       let distanceBetweenPlaneAndDestination = 0;
+      let orientation = 1;
 
       for (const element of arrayOfCities) {
         innerHTMLForMap += `<div id = "${element.name}"
@@ -70,7 +71,8 @@
             left: ${xCoord}px;
             top: ${yCoord}px;
             width: 50px;
-            height: auto;">`;
+            height: auto;
+            transform: scaleX(${orientation})">`;
             planeHasSpawned = true;
             document.getElementById("container").innerHTML = innerHTMLForMap;
           } else {
@@ -96,23 +98,30 @@
             distanceBetweenPlaneAndDestination) *
           velocity;
         let id;
-        if (
-          planeXCoord != xCoordOfDestination ||
-          planeYCoord != yCoordOfDestination
-        ) {
-          planeIsFlying = true;
-          planeXCoord += xVelocity;
-          plane.style.left = planeXCoord + "px";
-          planeYCoord += yVelocity;
-          plane.style.top = planeYCoord + "px";
-          if (distanceBetweenPlaneAndDestination <= velocity) {
-            plane.style.left = xCoordOfDestination + "px";
-            plane.style.top = yCoordOfDestination + "px";
-            planeIsFlying = false;
-          } else {
-            id = setTimeout(flyPlane, 300);
-          }
+
+        setOrientation(xVelocity);
+        planeIsFlying = true;
+        planeXCoord += xVelocity;
+        plane.style.left = planeXCoord + "px";
+        planeYCoord += yVelocity;
+        plane.style.top = planeYCoord + "px";
+        if (distanceBetweenPlaneAndDestination <= velocity) {
+          plane.style.left = xCoordOfDestination + "px";
+          plane.style.top = yCoordOfDestination + "px";
+          planeIsFlying = false;
+        } else {
+          id = setTimeout(flyPlane, 300);
         }
+      };
+
+      const setOrientation = function setOrientation(xVelocity) {
+        plane.style.transform = "";
+        if (xVelocity >= 0) {
+          orientation = 1;
+        } else {
+          orientation = -1;
+        }
+        plane.style.transform = "scaleX(" + orientation + ")";
       };
     </script>
   </body>
