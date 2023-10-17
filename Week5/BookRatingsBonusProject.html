@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    table {
+      border: 2px solid black;
+      text-align: center;
+      background-color: rgb(166, 240, 240);
+    }
+    th,
+    td {
+      border: 1px solid black;
+      padding: 10px;
+    }
+    caption {
+      font-size: 40px;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      color: aliceblue;
+    }
+    .clickable {
+      cursor: pointer;
+    }
+    body {
+      background-color: teal;
+    }
+    .leftSide {
+      width: 70%;
+      float: left;
+      position: relative;
+    }
+    .rightSide {
+      width: 20%;
+      float: left;
+      position: relative;
+      margin-right: 10%;
+    }
+  </style>
+  <body>
+    <!-- Type ! and then tab to enter boilerplate html -->
+    <div>
+      <div id="dataTable" class="leftSide"></div>
+      <div id="averageRatings" class="rightSide"></div>
+    </div>
+
+    <script src="./myBooks.js"></script>
+
+    <script>
+      const arrayOfBooksIHaveRead = myBooks.haveRead;
+      const sortByTitle = (array) => {
+        let sortedArray = array.toSorted((a, b) => {
+          const title1 = a[0].toLowerCase();
+          const title2 = b[0].toLowerCase();
+          if (title1 < title2) {
+            return -1;
+          }
+          if (title1 > title2) {
+            return 1;
+          }
+          // if title name is identical
+          return 0;
+        });
+        addSortedDataToTable(sortedArray);
+      };
+
+      const sortByAuthor = (array) => {
+        let sortedArray = array.toSorted((a, b) => {
+          const author1 = a[1].toLowerCase();
+          const author2 = b[1].toLowerCase();
+          if (author1 < author2) {
+            return -1;
+          }
+          if (author1 > author2) {
+            return 1;
+          }
+          // if author name is identical
+          return 0;
+        });
+        addSortedDataToTable(sortedArray);
+        return sortedArray;
+      };
+
+      const sortByRating = (array) => {
+        let sortedByAuthor = sortByAuthor(array);
+        let sortedArray = sortedByAuthor.toSorted((a, b) => b[2] - a[2]);
+        addSortedDataToTable(sortedArray);
+      };
+
+      const sortByDatePublished = (array) => {
+        let sortedByAuthor = sortByAuthor(array);
+        let sortedArray = sortedByAuthor.toSorted((a, b) => b[3] - a[3]);
+        addSortedDataToTable(sortedArray);
+      };
+
+      const sortByGenre = (array) => {
+        let sortedByAuthor = sortByAuthor(array);
+        let sortedArray = sortedByAuthor.toSorted((a, b) => {
+          const genre1 = a[4].toLowerCase();
+          const genre2 = b[4].toLowerCase();
+          if (genre1 < genre2) {
+            return -1;
+          }
+          if (genre1 > genre2) {
+            return 1;
+          }
+          // if genre is identical
+          return 0;
+        });
+        addSortedDataToTable(sortedArray);
+      };
+
+      const addSortedDataToTable = (array) => {
+        let html = "";
+        html += `<table> 
+            <caption> My Booklist </caption>
+            <tr>
+              <th class = "clickable" onclick = "sortByTitle(arrayOfBooksIHaveRead)"> Title </th>
+              <th class = "clickable" onclick = "sortByAuthor(arrayOfBooksIHaveRead)"> Author </th>
+              <th class = "clickable" onclick = "sortByRating(arrayOfBooksIHaveRead)"> My Rating </th>
+              <th class = "clickable" onclick = "sortByDatePublished(arrayOfBooksIHaveRead)" > Date Published </th>
+              <th class = "clickable" onclick = "sortByGenre(arrayOfBooksIHaveRead)"> Genre </th>
+            </tr>`;
+
+        for (let i = 0; i < array.length; i++) {
+          html += `<tr> 
+            <td> ${array[i][0]} </td>
+            <td> ${array[i][1]} </td>
+            <td> ${array[i][2]} </td>
+            <td> ${array[i][3]} </td>
+            <td> ${array[i][4]} </td>
+            </tr>`;
+        }
+        html += `</table>`;
+        document.getElementById("dataTable").innerHTML = html;
+      };
+
+      sortByTitle(arrayOfBooksIHaveRead); // default order when page loads
+
+      let genreData = [];
+
+      const addDataTableOfAverageRatingPerGenre = (array) => {
+        let html = "";
+        html += `<table> 
+            <caption> Genre Data </caption>
+            <tr>
+              <th class = "clickable" onclick = "sortGenreTrendsByGenre(genreData)"> Genre </th>
+              <th class = "clickable" onclick = "sortGenreTrendsByNumBooksRead(genreData)"> Number of Books Read </th>
+              <th class = "clickable" onclick = "sortGenreTrendsByAvgRating(genreData)"> My Average Rating </th>
+            </tr>`;
+
+        for (let i = 0; i < array.length; i++) {
+          html += `<tr> 
+            <td> ${array[i].genre} </td>
+            <td> ${array[i].numBooks} </td>
+            <td> ${array[i].avgRating} </td>
+            </tr>`;
+        }
+        html += `</table>`;
+        document.getElementById("averageRatings").innerHTML = html;
+      };
+
+      const addKeysToGenreDataArray = (array) => {
+        for (i = 0; i < array.length; i++) {
+          array[i].numBooks = 0;
+          array[i].sumRatings = 0;
+        }
+      };
+
+      const calculateAverages = (array) => {
+        for (let i = 0; i < array.length; i++) {
+          for (let j = 0; j < genreData.length; j++) {
+            // make this look better with indexOf?
+            if (genreData[j].genre === array[i][4]) {
+              genreData[j].numBooks++;
+              genreData[j].sumRatings += array[i][2];
+              break;
+            }
+          }
+        }
+        for (let i = 0; i < genreData.length; i++) {
+          genreData[i].avgRating = (
+            genreData[i].sumRatings / genreData[i].numBooks
+          ).toFixed(1);
+        }
+      };
+
+      const populateGenreDataArray = (array) => {
+        for (let i = 0; i < array.length; i++) {
+          let genre = array[i][4];
+          if (!genreData.some((item) => item.genre === genre)) {
+            genreData.push({ genre });
+          }
+        }
+        addKeysToGenreDataArray(genreData);
+        calculateAverages(array);
+        addDataTableOfAverageRatingPerGenre(genreData);
+      };
+
+      const sortGenreTrendsByGenre = (array) => {
+        let sortedArray = array.toSorted((a, b) => {
+          const genre1 = a.genre.toLowerCase();
+          const genre2 = b.genre.toLowerCase();
+          if (genre1 < genre2) {
+            return -1;
+          }
+          if (genre1 > genre2) {
+            return 1;
+          }
+          // if genre is identical
+          return 0;
+        });
+        addDataTableOfAverageRatingPerGenre(sortedArray);
+      };
+
+      const sortGenreTrendsByNumBooksRead = (array) => {
+        let sortedArray = array.toSorted((a, b) => b.numBooks - a.numBooks);
+        addDataTableOfAverageRatingPerGenre(sortedArray);
+      };
+
+      const sortGenreTrendsByAvgRating = (array) => {
+        let sortedArray = array.toSorted((a, b) => b.avgRating - a.avgRating);
+        addDataTableOfAverageRatingPerGenre(sortedArray);
+      };
+
+      // Adding my average rating by genre:
+      populateGenreDataArray(arrayOfBooksIHaveRead);
+    </script>
+  </body>
+</html>
