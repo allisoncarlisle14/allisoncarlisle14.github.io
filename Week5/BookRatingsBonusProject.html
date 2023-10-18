@@ -37,6 +37,7 @@
       float: left;
       position: relative;
       margin-right: 5%;
+      margin-bottom: 5%;
     }
   </style>
   <body>
@@ -44,7 +45,6 @@
     <div>
       <div id="dataTable" class="leftSide"></div>
       <div id="averageRatings" class="rightSide"></div>
-
       <canvas id="ratingsVsPublicationDate" style="max-width: 25%"></canvas>
     </div>
 
@@ -141,7 +141,7 @@
         document.getElementById("dataTable").innerHTML = html;
       };
 
-      // Add table of books I've read on page load (default order is sorted by title)
+      // Add a table of books I've read (default order is sorted by title)
       sortByTitle(arrayOfBooksIHaveRead);
 
       let genreData = [];
@@ -176,14 +176,11 @@
 
       const calculateAverages = (array) => {
         for (let i = 0; i < array.length; i++) {
-          for (let j = 0; j < genreData.length; j++) {
-            // make this look better with indexOf?
-            if (genreData[j].genre === array[i][4]) {
-              genreData[j].numBooks++;
-              genreData[j].sumRatings += array[i][2];
-              break;
-            }
-          }
+          let genreName = array[i][4];
+          let genreObject = genreData.find((item) => item.genre === genreName);
+
+          genreObject.numBooks++;
+          genreObject.sumRatings += array[i][2];
         }
         for (let i = 0; i < genreData.length; i++) {
           genreData[i].avgRating = (
@@ -230,7 +227,7 @@
         addDataTableOfAverageRatingPerGenre(sortedArray);
       };
 
-      // Add table of my genre data 
+      // Add a table of my genre data
       populateGenreDataArray(arrayOfBooksIHaveRead);
 
       let chartData = [];
@@ -262,7 +259,7 @@
             title: {
               display: true,
               text: "My Rating vs. Publication Date",
-              fontSize: 25,
+              fontSize: 20,
               fontColor: "teal",
               fontFamily: "Georgia",
             },
@@ -287,7 +284,7 @@
           },
         });
       };
-      // Add graph of my ratings vs. publication date
+      // Add a graph of my ratings vs. publication date
       generateRatingsVsPublicationDateCoordinates(arrayOfBooksIHaveRead);
     </script>
   </body>
