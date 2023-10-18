@@ -44,11 +44,12 @@
     <div>
       <div id="dataTable" class="leftSide"></div>
       <div id="averageRatings" class="rightSide"></div>
-      <canvas id="ratingsVsPublicationDate" style = "max-width: 25%"></canvas> 
+
+      <canvas id="ratingsVsPublicationDate" style="max-width: 25%"></canvas>
     </div>
 
     <script src="./myBooks.js"></script>
-    <!-- Adding a link to the CDN for the free JavaScript library, Chart.js -->
+    <!-- Adding a link to the CDN for the free JavaScript library, Chart.js (old version)-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
     <script>
@@ -141,7 +142,7 @@
       };
 
       // Add table of books I've read on page load (default order is sorted by title)
-      sortByTitle(arrayOfBooksIHaveRead); 
+      sortByTitle(arrayOfBooksIHaveRead);
 
       let genreData = [];
 
@@ -229,48 +230,65 @@
         addDataTableOfAverageRatingPerGenre(sortedArray);
       };
 
-      // Adding my average rating by genre:
+      // Add table of my genre data 
       populateGenreDataArray(arrayOfBooksIHaveRead);
 
-    let chartData = [];
-    let minYear = new Date().getFullYear();
-    let maxYear = new Date().getFullYear();
+      let chartData = [];
+      let minYear = new Date().getFullYear();
+      let maxYear = new Date().getFullYear();
 
-    const generateRatingsVsPublicationDateCoordinates = (array) => {
+      const generateRatingsVsPublicationDateCoordinates = (array) => {
         for (let i = 0; i < array.length; i++) {
-            chartData.push({x: array[i][3], y: array[i][2]});
-            if (array[i][3] < minYear) {
-              minYear = array[i][3];
-            }
+          chartData.push({ x: array[i][3], y: array[i][2] });
+          if (array[i][3] < minYear) {
+            minYear = array[i][3];
+          }
         }
         populateChart(chartData);
-    }
-    const populateChart = (chartData) => {
-    new Chart("ratingsVsPublicationDate", {
+      };
+      const populateChart = (chartData) => {
+        new Chart("ratingsVsPublicationDate", {
           type: "scatter",
           data: {
-            datasets: [{
-              pointRadius: 3,
-              pointBackgroundColor: "teal",
-              data: chartData
-            }]
+            datasets: [
+              {
+                pointRadius: 3,
+                pointBackgroundColor: "teal",
+                data: chartData,
+              },
+            ],
           },
           options: {
-            title: {display: true,
-            text: "My Rating vs. Publication Date",},
-            legend: {display: false},
+            title: {
+              display: true,
+              text: "My Rating vs. Publication Date",
+              fontSize: 25,
+              fontColor: "teal",
+              fontFamily: "Georgia",
+            },
+            legend: { display: false },
             scales: {
-              xAxes: [{ticks: {min: minYear, max: maxYear}}],
-              yAxes: [{ticks: {min: 0, max:5}}],
-            }
-          }
+              xAxes: [
+                {
+                  ticks: { min: minYear, max: maxYear, stepSize: 37 },
+                  scaleLabel: {
+                    labelString: "Publication Year",
+                    display: true,
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  ticks: { min: 0, max: 5, stepSize: 1 },
+                  scaleLabel: { labelString: "My Rating", display: true },
+                },
+              ],
+            },
+          },
         });
-      }
-
-        generateRatingsVsPublicationDateCoordinates(arrayOfBooksIHaveRead);
-
-
-
+      };
+      // Add graph of my ratings vs. publication date
+      generateRatingsVsPublicationDateCoordinates(arrayOfBooksIHaveRead);
     </script>
   </body>
 </html>
