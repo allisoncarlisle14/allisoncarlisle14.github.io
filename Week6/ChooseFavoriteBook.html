@@ -28,12 +28,20 @@
       const arrayOfBooksIHaveRead = myBooks.haveRead;
       const arrayWithByes = [];
 
+      const addImages = () => { // new
+        for (let i = 0; i < arrayOfBooksIHaveRead.length; i++) {
+            arrayOfBooksIHaveRead[i].push("https://upload.wikimedia.org/wikipedia/en/3/39/The_Hunger_Games_cover.jpg")
+        }
+      }
+      addImages(); // new 
+      
+
       const createArrayOfBooksIRatedAFive = () => {
         const filteredByRatingOfFive = arrayOfBooksIHaveRead.filter(
           (item) => item[2] === 5
         );
         titlesOfBooksWithRatingsOfFive = filteredByRatingOfFive.map(
-          (item) => item[0]
+          (item) => item[5]
         );
         totalNumberOfBooksWithARatingOfFive =
           titlesOfBooksWithRatingsOfFive.length;
@@ -42,7 +50,7 @@
         );
         numberOfByes = 2 ** exponentOfTwo % totalNumberOfBooksWithARatingOfFive;
         for (let i = 0; i < 2 * numberOfByes; i += 2) {
-          titlesOfBooksWithRatingsOfFive.splice(i, 0, "bye");
+          titlesOfBooksWithRatingsOfFive.splice(i, 0, "https://en.wikipedia.org/wiki/File:ByeByeBirdie1.jpg"); //changed
         }
 
         numberOfBooks = totalNumberOfBooksWithARatingOfFive; //
@@ -68,6 +76,7 @@
             box.style.justifyContent = "center";
             box.style.alignItems = "center";
             box.innerHTML = currentArrayOfTitles[i];
+            console.log(currentArrayOfTitles[i]);
             if (exponentOfTwo === 0 && i === 0) {
               box.setAttribute("id", "winner");
               box.setAttribute("onclick", `update('winner')`);
@@ -139,9 +148,17 @@
         }
       };
 
+    
+
       const updateCurrentArrayOfTitles = () => {
         if (numberOfBooks === totalNumberOfBooksWithARatingOfFive) {
-          return titlesOfBooksWithRatingsOfFive;
+            let arrayOfInnerHTMLForImages = [];
+            for (let i = 0; i < titlesOfBooksWithRatingsOfFive.length; i ++) {
+                arrayOfInnerHTMLForImages.push(`<img src = "${titlesOfBooksWithRatingsOfFive[i]}" height = "${heightOfEachBox}">`);
+            }
+         
+            return arrayOfInnerHTMLForImages;
+          
         } else {
           let currentArrayOfTitles = [];
           for (let i = 0; i < 2 ** exponentOfTwo; i++) {
@@ -152,6 +169,7 @@
               currentArrayOfTitles.push(
                 document.getElementById(`${exponentOfTwo}` + `${i}`).innerHTML
               );
+             
             }
           }
           return currentArrayOfTitles;
