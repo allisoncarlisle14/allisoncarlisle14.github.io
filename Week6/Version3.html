@@ -6,10 +6,20 @@
     <title>Document</title>
   </head>
   <body>
+    <style>
+      img {
+        transition: transform 0.3s;
+        z-index: 1;
+      }
+      img:hover {
+        transform: scale(3);
+        z-index: 2;
+      }
+    </style>
     <button
       title="Click to submit your ratings once you have selected one book in each pairing."
       id="submit"
-      onclick="createBoxes()"
+      onclick="populateCurrentRoundWithBookCovers()"
       onmouseover="checkIfReadyToSubmit()"
       onmouseout="this.style.background = ''"
     >
@@ -22,70 +32,66 @@
       let exponentOfTwo = 0;
       let numberOfBooks = 0;
       let readyToSubmit = true;
-      let titlesOfBooksWithRatingsOfFive = [];
+      let coversOfBooksWithRatingsOfFive = [];
       const bracketWidth = 1350;
-      const bracketHeight = 500;
+      const bracketHeight = 550;
       const arrayOfBooksIHaveRead = myBooks.haveRead;
       const arrayWithByes = [];
-
-      const addImages = () => { // new
-        for (let i = 0; i < arrayOfBooksIHaveRead.length; i++) {
-            arrayOfBooksIHaveRead[i].push("https://upload.wikimedia.org/wikipedia/en/3/39/The_Hunger_Games_cover.jpg")
-        }
-      }
-      addImages(); // new 
-      
 
       const createArrayOfBooksIRatedAFive = () => {
         const filteredByRatingOfFive = arrayOfBooksIHaveRead.filter(
           (item) => item[2] === 5
         );
-        titlesOfBooksWithRatingsOfFive = filteredByRatingOfFive.map(
+        coversOfBooksWithRatingsOfFive = filteredByRatingOfFive.map(
           (item) => item[5]
         );
         totalNumberOfBooksWithARatingOfFive =
-          titlesOfBooksWithRatingsOfFive.length;
+          coversOfBooksWithRatingsOfFive.length;
         exponentOfTwo = Math.ceil(
           Math.log2(totalNumberOfBooksWithARatingOfFive)
         );
         numberOfByes = 2 ** exponentOfTwo % totalNumberOfBooksWithARatingOfFive;
         for (let i = 0; i < 2 * numberOfByes; i += 2) {
-          titlesOfBooksWithRatingsOfFive.splice(i, 0, "https://en.wikipedia.org/wiki/File:ByeByeBirdie1.jpg"); //changed
+          coversOfBooksWithRatingsOfFive.splice(i, 0, "ByeMessage.png");
         }
 
         numberOfBooks = totalNumberOfBooksWithARatingOfFive; //
       };
 
-      const createBoxes = () => {
+      const populateCurrentRoundWithBookCovers = () => {
         if (readyToSubmit) {
-          let currentArrayOfTitles = updateCurrentArrayOfTitles(); // build this
+          let currentArrayOfTitles = updateCurrentArrayOfTitles();
           exponentOfTwo = Math.ceil(Math.log2(numberOfBooks));
           let horizontalSpacing = calculateHorizontalSpacing(exponentOfTwo);
+
           for (let i = 0; i < 2 ** exponentOfTwo; i++) {
-            let box = document.createElement("div");
-            box.style.position = "absolute";
-            box.style.zIndex = 1;
-            box.style.backgroundColor = "rgb(218,210,210)";
-            box.style.borderStyle = "solid";
-            box.style.borderColor = "black;";
-            box.style.width = horizontalSpacing + "px";
-            box.style.height = heightOfEachBox + "px";
-            box.style.left = horizontalSpacing * (2 * i + 1) + "px";
-            box.style.top = heightOfEachBox * (3 * exponentOfTwo + 1) + "px";
-            box.style.display = "flex";
-            box.style.justifyContent = "center";
-            box.style.alignItems = "center";
-            box.innerHTML = currentArrayOfTitles[i];
-            console.log(currentArrayOfTitles[i]);
+            let bookCover = document.createElement("img");
+            bookCover.style.position = "absolute";
+            bookCover.style.borderStyle = "solid";
+            bookCover.style.borderColor = "white";
+            bookCover.style.height = heightOfEachBox + "px";
+            bookCover.style.left =
+              (horizontalSpacing * (2 * i + 1) +
+                (horizontalSpacing * (2 * i + 1) + horizontalSpacing)) /
+                2 -
+              bookCover.style.width / 2 +
+              "px";
+            bookCover.style.top =
+              heightOfEachBox * (3 * exponentOfTwo + 1) + "px";
+            bookCover.src = currentArrayOfTitles[i];
             if (exponentOfTwo === 0 && i === 0) {
-              box.setAttribute("id", "winner");
-              box.setAttribute("onclick", `update('winner')`);
-              box.style.backgroundColor = "steelblue";
+              bookCover.setAttribute("id", "winner");
+              bookCover.setAttribute("onclick", `update('winner')`);
+              bookCover.style.borderStyle = "solid";
+              bookCover.style.borderColor = "green";
             } else {
-              box.setAttribute("id", `${exponentOfTwo}` + `${i}`);
-              box.setAttribute("onclick", `update(${exponentOfTwo}` + `${i})`);
+              bookCover.setAttribute("id", `${exponentOfTwo}` + `${i}`);
+              bookCover.setAttribute(
+                "onclick",
+                `update(${exponentOfTwo}` + `${i})`
+              );
             }
-            document.body.appendChild(box);
+            document.body.appendChild(bookCover);
           }
           numberOfBooks = 2 ** (exponentOfTwo - 1);
           readyToSubmit = false;
@@ -111,9 +117,7 @@
         for (let i = 0; i < 2 ** exponentOfTwo; i++) {
           let id = "" + exponentOfTwo + i;
 
-          if (
-            document.getElementById(id).style.backgroundColor === "lightblue"
-          ) {
+          if (document.getElementById(id).style.borderStyle === "solid") {
             numberOfGreenBooksInCurrentRound++;
           }
         }
@@ -134,42 +138,36 @@
           //ensuring you can't go back and change selections from an earlier round
           if (
             id !== "winner" &&
-            document.getElementById(id).innerHTML !== "bye"
+            document.getElementById(id).src !==
+              "file:///Users/allisoncarlisle/Documents/GitHub/profile/Week6/ByeMessage.png"
           ) {
-            document.getElementById(id).style.backgroundColor = "lightblue";
+            document.getElementById(id).style.borderStyle = "solid";
+            document.getElementById(id).style.borderColor = "green";
+
             if (id % 2 === 0) {
-              document.getElementById(id + 1).style.backgroundColor =
-                "rgb(218,210,210)";
+              document.getElementById(id + 1).style.borderStyle = "";
             } else {
-              document.getElementById(id - 1).style.backgroundColor =
-                "rgb(218,210,210)";
+              document.getElementById(id - 1).style.borderStyle = "";
             }
           }
         }
       };
 
-    
-
       const updateCurrentArrayOfTitles = () => {
         if (numberOfBooks === totalNumberOfBooksWithARatingOfFive) {
-            let arrayOfInnerHTMLForImages = [];
-            for (let i = 0; i < titlesOfBooksWithRatingsOfFive.length; i ++) {
-                arrayOfInnerHTMLForImages.push(`<img src = "${titlesOfBooksWithRatingsOfFive[i]}" height = "${heightOfEachBox}">`);
-            }
-         
-            return arrayOfInnerHTMLForImages;
-          
+          // setting up the initial round
+          return coversOfBooksWithRatingsOfFive;
         } else {
           let currentArrayOfTitles = [];
           for (let i = 0; i < 2 ** exponentOfTwo; i++) {
             if (
+              // only the selected titles advance to the next round
               document.getElementById(`${exponentOfTwo}` + `${i}`).style
-                .backgroundColor === "lightblue"
+                .borderStyle === "solid"
             ) {
               currentArrayOfTitles.push(
-                document.getElementById(`${exponentOfTwo}` + `${i}`).innerHTML
+                document.getElementById(`${exponentOfTwo}` + `${i}`).src
               );
-             
             }
           }
           return currentArrayOfTitles;
@@ -178,7 +176,7 @@
 
       createArrayOfBooksIRatedAFive();
       calculateVerticalSpacing(totalNumberOfBooksWithARatingOfFive);
-      createBoxes();
+      populateCurrentRoundWithBookCovers();
     </script>
   </body>
 </html>
