@@ -1,4 +1,4 @@
-## Title: Real Time Bus Tracker 
+## Real Time Bus Tracker 
 
 ### Description:
 This is a project that I edited for MIT xPRO's web development class. The goal was to add markers to a map to show the live position of each bus that travels the route between Harvard and MIT. 
