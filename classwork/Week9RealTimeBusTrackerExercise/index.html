@@ -6,14 +6,14 @@
     <link rel = "stylesheet" href = "styles.css">
   </head>
   <body>
-    <!-- I added the 'busContainer' id to the gmp-map and removed the default marker that was here.-->
+    <!-- I added the 'busContainer' id to the gmp-map and removed the default marker that was here. (AC)-->
     <gmp-map id = 'busContainer' center="42.36035919189453,-71.0948486328125" zoom="14" map-id="DEMO_MAP_ID">
 
     </gmp-map>
 
     <!-- The callback parameter is required, so we use console.debug as a noop -->
-    <!-- I removed my API key to protect it before pushing this project to GitHub-->
-    <!-- Remove {INSERT YOUR API KEY HERE} (including the brackets) in the line below and insert your own Google Maps API key to make the program work-->
+    <!-- I removed my API key to protect it before pushing this project to GitHub (AC)-->
+    <!-- Remove {INSERT YOUR API KEY HERE} (including the brackets) in the line below and insert your own Google Maps API key to make the program work (AC)-->
 
     <script async src="https://maps.googleapis.com/maps/api/js?key={INSERT-YOUR-KEY-HERE}&callback=console.debug&libraries=maps,marker&v=beta">
     </script>
