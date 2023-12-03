@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width = device-width, intial-scale = 1.0">
+    <title> Simple calculator </title>
+</head>
+<body>
+    <script src = "functions.js"> </script>
+<div id = "calculator">
+    <table> 
+        <tr> <td colspan = "4" id = "mode"> Radian Mode </td> </tr>
+        <tr> <td colspan = "4" id = "field"> Click Buttons To Start </td> </tr>
+    
+        <tr>
+        <td> <button id = "log" onclick = "pushButton(functions.logarithmInField, functions.logarithmInExpression, '10')"> Log </button> </td>
+        <td> <button id = "ln" onclick = "pushButton(functions.logarithmInField, functions.logarithmInExpression, 'e')"> Ln </button> </td>
+        <td> <button id = "e" onclick = "pushButton(functions.insertConstantInField, functions.insertConstantInExpression, 'E')"> e </button> </td>
+        <td> <button id = "pi" onclick = "pushButton(functions.insertConstantInField, functions.insertConstantInExpression, 'PI')"> PI </button> </td>
+    </tr>
+    <tr> 
+        <td> <button id = "sin" onclick = "pushButton(functions.sohcahtoaInField, functions.sohcahtoaInExpression, 'sin')"> Sin </button> </td>
+        <td> <button id = "cos" onclick = "pushButton(functions.sohcahtoaInField, functions.sohcahtoaInExpression, 'cos')"> Cos </button> </td>
+        <td> <button id = "tan" onclick = "pushButton(functions.sohcahtoaInField, functions.sohcahtoaInExpression, 'tan')"> Tan </button> </td>
+        <td> <button id = "clear" onclick = "pushButton(functions.clearField, functions.clearExpression, '')"> Clear </button> </td>
+    </tr>
+    <tr>
+        <td> <button id = "^" onclick = "pushButton(functions.raiseToPowerInField, functions.raiseToPowerInExpression, '^')"> ^ </button> </td>
+        <td> <button id = "open" onclick = "pushButton(functions.addParenthesesToField, functions.addParenthesesToExpression, 'open')"> ( </button> </td>
+        <td> <button id = "closed" onclick = "pushButton(functions.addParenthesesToField, functions.addParenthesesToExpression, 'closed')"> ) </button> </td>
+        <td> <button id = "/" onclick = "pushButton(functions.enterOperatorIntoField, functions.enterOperatorIntoExpression, '/')"> / </button></td>
+    </tr>
+    <tr>
+        <td> <button id = "7" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 7)"> 7 </button> </td>
+        <td> <button id = "8" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 8)"> 8 </button> </td>
+        <td> <button id = "9" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 9)"> 9 </button> </td>
+        <td> <button id = "*" onclick = "pushButton(functions.enterOperatorIntoField, functions.enterOperatorIntoExpression, '*')"> * </button></td>
+    </tr>
+    <tr>
+        <td> <button id = "4" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 4)"> 4 </button> </td>
+        <td> <button id = "5" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 5)"> 5 </button> </td>
+        <td> <button id = "6" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 6)"> 6 </button> </td>
+        <td> <button id = "-" onclick = "pushButton(functions.enterOperatorIntoField, functions.enterOperatorIntoExpression, '-')"> - </button></td>
+    </tr>
+    <tr>
+        <td> <button id = "1" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 1)"> 1 </button> </td>
+        <td> <button id = "2" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 2)"> 2 </button> </td>
+        <td> <button id = "3" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 3)"> 3 </button> </td>
+        <td> <button id = "+" onclick = "pushButton(functions.enterOperatorIntoField, functions.enterOperatorIntoExpression, '+')"> + </button></td>
+    </tr>
+    <tr>
+        <td> <button id = "0" onclick = "pushButton(functions.enterNumberIntoField, functions.enterNumberIntoExpression, 0)"> 0 </button> </td>
+        <td> <button id = "." onclick = "pushButton(functions.addDecimalInField, functions.addDecimalInExpression, '.')"> . </button> </td>
+        <td> <button id = "neg" onclick = "pushButton(functions.negateValueInField, functions.negateValueInExpression, '-')"> (-) </button> </td>
+        <td> <button id = "equals" onclick = "calculateValue()"> = </button></td>
+    </tr>
+    </table>
+
+</div>
+</body>
+</html>

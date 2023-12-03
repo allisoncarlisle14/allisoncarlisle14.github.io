@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Move Ball Bonus Assignment</title>
+  </head>
+  <body>
+    <!-- If this code runs successfully, a ball should get launched as a projectile and both lose energy and fade in color each time it bounces on the ground.-->
+
+    <!-- Creating the ball: -->
+    <div
+      id="ball"
+      style="
+        z-index: 1;
+        position: absolute;
+        left: 0px;
+        top: 400px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgb(128, 0, 128);
+        opacity: 1;
+      "
+    ></div>
+
+    <script>
+      var ball = document.getElementById("ball");
+      var radius = parseInt(ball.style.width);
+      var opacity = ball.style.opacity;
+      //Horizontal and vertical positions:
+      const ground = parseInt(ball.style.top);
+      var x = parseInt(ball.style.left);
+      var y = parseInt(ball.style.top);
+      //Incremental change in horizontal and vertical positions:
+      var dx = 10;
+      var dy = -10;
+      //Vertical acceleration:
+      var ay = 1;
+      //Time interval:
+      var dt = 50;
+      //Percent of vertical speed remaining after bounce as a decimal:
+      var percent = 0.75;
+      console.log(screen.availWidth);
+
+      function move() {
+        if (x < screen.availWidth - radius && opacity >0) {
+          x = x + dx;
+          ball.style.left = x + "px";
+          y = y + dy;
+          ball.style.top = y + "px";
+          dy = dy + ay;
+          if (y > ground && dy > 0) {
+            dy = -percent * dy;
+            opacity = opacity - 0.05;
+            ball.style.opacity = opacity;
+          }
+        }
+      }
+      setInterval(move, dt);
+    </script>
+  </body>
+</html>
